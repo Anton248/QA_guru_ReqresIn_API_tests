@@ -45,7 +45,7 @@ public class RegisterTests {
     @Test
     @Tag("medium") @Tag("extended") @Tag("negative")
     @DisplayName("Registering with too long password")
-    void RegistrationWithWrongPassword() {
+    void RegistrationWithWrongLongPassword() {
 
         RegistrationRequestBody request = new RegistrationRequestBody();
         request.setEmail("eve.holt@reqres.in");
