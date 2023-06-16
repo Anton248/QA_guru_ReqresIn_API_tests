@@ -1,8 +1,10 @@
 package tests;
 
+import io.restassured.RestAssured;
 import models.UserRequestBody;
 import models.UserCreateResponseBody;
 import models.UserUpdateResponseBody;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //Testing creation and updating user on https://reqres.in/
 public class CreateAndUpdateUserTests {
+
+    @BeforeEach
+    void setup() {
+        RestAssured.baseURI = "https://reqres.in";
+        RestAssured.basePath = "/api";
+    }
 
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
@@ -36,7 +44,7 @@ public class CreateAndUpdateUserTests {
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
           when().
-                 post("https://reqres.in/api/users").
+                 post("/users").
           then().
                  log().status().
                  log().body().
@@ -69,7 +77,7 @@ public class CreateAndUpdateUserTests {
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
          when().
-                 put("https://reqres.in/api/users/2").
+                 put("/users/2").
          then().
                  log().status().
                  log().body().
@@ -100,7 +108,7 @@ public class CreateAndUpdateUserTests {
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
           when().
-                 patch("https://reqres.in/api/users/2").
+                 patch("/users/2").
           then().
                  log().status().
                  log().body().
@@ -128,7 +136,7 @@ public class CreateAndUpdateUserTests {
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
           when().
-                 put("https://reqres.in/api/users/2").
+                 put("/users/2").
           then().
                  log().status().
                  log().body().

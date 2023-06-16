@@ -1,7 +1,9 @@
 package tests;
 
+import io.restassured.RestAssured;
 import models.RegistrationRequestBody;
 import models.RegistrationResponseBody;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //Testing the registration of new user on https://reqres.in/
 public class RegisterTests {
+
+    @BeforeEach
+    void setup() {
+        RestAssured.baseURI = "https://reqres.in";
+        RestAssured.basePath = "/api";
+    }
 
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
@@ -30,7 +38,7 @@ public class RegisterTests {
                 contentType(JSON).    // = header("content-type", JSON).
                 body(request).
          when().
-                post("https://reqres.in/api/register").
+                post("/register").
          then().
                 log().status().
                 log().body().
@@ -58,7 +66,7 @@ public class RegisterTests {
                  contentType(JSON).
                  body(request).
          when().
-                 post("https://reqres.in/api/register").
+                 post("/register").
          then().
                  log().status().
                  log().body().
@@ -83,7 +91,7 @@ public class RegisterTests {
                  contentType(JSON).
                  body(request).
          when().
-                 post("https://reqres.in/api/register").
+                 post("/register").
          then().
                  log().status().
                  log().body().
