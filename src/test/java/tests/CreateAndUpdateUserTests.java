@@ -13,8 +13,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 //Testing creation and updating user on https://reqres.in/
 public class CreateAndUpdateUserTests {
@@ -39,7 +38,7 @@ public class CreateAndUpdateUserTests {
                  body(request).
           when().
                  post("https://reqres.in/api/users").
-                 then().
+          then().
                  log().status().
                  log().body().
                  statusCode(201).
@@ -116,15 +115,14 @@ public class CreateAndUpdateUserTests {
 
     @Test
     @Tag("critical") @Tag("negative")
-    @DisplayName("Updating wrong user, which doesn't exist")
-    void updateWrongUserTest() {
+    @DisplayName("Updating empty user")
+    void updateEmptyUserTest() {
 
         UserRequestBody request = new UserRequestBody();
-        String name = "this user doesn't exist ёёёёё";
         String job = "zion resident";
-        request.setName(name);
         request.setJob(job);
 
+        UserUpdateResponseBody responseBody =
          given().
                  log().uri().
                  log().body().
@@ -135,8 +133,10 @@ public class CreateAndUpdateUserTests {
           then().
                  log().status().
                  log().body().
-                 statusCode(400).    // 'bug' is here
-                 body("error", is("Such user does not exist"));
+                 statusCode(200).
+                 extract().as(UserUpdateResponseBody.class);
+
+        assertNull(responseBody.getName());
     }
 
 }

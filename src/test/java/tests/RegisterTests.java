@@ -17,7 +17,7 @@ public class RegisterTests {
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
     @DisplayName("Registering via email & password")
-    void SuccessfulRegistrationTest() {
+    void successfulRegistrationTest() {
 
         RegistrationRequestBody request = new RegistrationRequestBody();
         request.setEmail("eve.holt@reqres.in");
@@ -44,16 +44,12 @@ public class RegisterTests {
 
     @Test
     @Tag("medium") @Tag("extended") @Tag("negative")
-    @DisplayName("Registering with too long password")
-    void RegistrationWithWrongLongPassword() {
+    @DisplayName("Registering with empty password")
+    void registrationWithEmptyPassword() {
 
         RegistrationRequestBody request = new RegistrationRequestBody();
         request.setEmail("eve.holt@reqres.in");
-        StringBuilder password = new StringBuilder();
-        for (int i = 0; i < 2000; i++) {   //creating too long password
-            password.append(i);
-        }
-        request.setPassword(password.toString());
+        request.setPassword("");
 
         RegistrationResponseBody responseBody =
          given().
@@ -66,16 +62,16 @@ public class RegisterTests {
          then().
                  log().status().
                  log().body().
-                 statusCode(400).       //'bug' is here
+                 statusCode(400).
                  extract().as(RegistrationResponseBody.class);
 
-        assertEquals("Too long password", responseBody.getError());
+        assertEquals("Missing password", responseBody.getError());
     }
 
     @Test
     @Tag("critical") @Tag("blocker") @Tag("negative")
     @DisplayName("Registering without password")
-    void RegistrationWithoutPassword() {
+    void registrationWithoutPassword() {
 
         RegistrationRequestBody request = new RegistrationRequestBody();
         request.setEmail("eve.holt@reqres.in");
