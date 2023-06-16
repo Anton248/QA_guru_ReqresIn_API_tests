@@ -67,16 +67,18 @@ test {
     }
 }
 
+task smoke(type: Test) {
+    useJUnitPlatform{
+        includeTags("smoke")
+    }
+}
+
 //нужно, чтобы брать переменные из командной строки через -D<имя переменной>=<значение>
 tasks.withType(Test) {
     systemProperties(System.getProperties())
 }
 
 
-task smoke(type: Test) {
-    useJUnitPlatform{
-        includeTags("smoke")
-    }
-}
+
 
 
