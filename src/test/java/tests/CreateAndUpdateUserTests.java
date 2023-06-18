@@ -4,13 +4,12 @@ import io.restassured.RestAssured;
 import models.UserRequestBody;
 import models.UserCreateResponseBody;
 import models.UserUpdateResponseBody;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Calendar;
 
+import static helpers.AllureListener.withCustomTemplates;
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -19,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 //Testing creation and updating user on https://reqres.in/
 public class CreateAndUpdateUserTests {
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    static void init(){
+        RestAssured.filters(withCustomTemplates());
         RestAssured.baseURI = "https://reqres.in";
         RestAssured.basePath = "/api";
     }
@@ -38,24 +38,26 @@ public class CreateAndUpdateUserTests {
         request.setJob(job);
 
         UserCreateResponseBody responseBody =
-         given().
-                 log().uri().
-                 log().body().
-                 contentType(JSON).    // = header("content-type", JSON).
+        step("Make request and receive response", ()->
+             given().
+
                  body(request).
-          when().
+                 //filter(new AllureRestAssured()).
+             when().
                  post("/users").
-          then().
+             then().
                  log().status().
                  log().body().
                  statusCode(201).
                  body(matchesJsonSchemaInClasspath("schemes/create-user-response-scheme.json")).
-                 extract().as(UserCreateResponseBody.class);
+                 extract().as(UserCreateResponseBody.class));
 
-        assertEquals(name, responseBody.getName());
-        assertEquals(job, responseBody.getJob());
-        assertTrue(responseBody.getId().matches("[0-9]+"));
-        assertTrue(responseBody.getCreatedAt().contains(currentYear));
+        step("Check response", () -> {
+            assertEquals(name, responseBody.getName());
+            assertEquals(job, responseBody.getJob());
+            assertTrue(responseBody.getId().matches("[0-9]+"));
+            assertTrue(responseBody.getCreatedAt().contains(currentYear));
+        });
     }
 
     @Test
@@ -71,22 +73,25 @@ public class CreateAndUpdateUserTests {
         request.setJob(job);
 
         UserUpdateResponseBody responseBody =
-         given().
+        step("Make request and receive response", ()->
+            given().
                  log().uri().
                  log().body().
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
-         when().
+            when().
                  put("/users/2").
-         then().
+            then().
                  log().status().
                  log().body().
                  statusCode(200).
-                 extract().as(UserUpdateResponseBody.class);
+                 extract().as(UserUpdateResponseBody.class));
 
-        assertEquals(name, responseBody.getName());
-        assertEquals(job, responseBody.getJob());
-        assertTrue(responseBody.getUpdatedAt().contains(currentYear));
+        step("Check response", () -> {
+            assertEquals(name, responseBody.getName());
+            assertEquals(job, responseBody.getJob());
+            assertTrue(responseBody.getUpdatedAt().contains(currentYear));
+        });
     }
 
     @Test
@@ -102,22 +107,25 @@ public class CreateAndUpdateUserTests {
         request.setJob(job);
 
         UserUpdateResponseBody responseBody =
-         given().
+        step("Make request and receive response", ()->
+            given().
                  log().uri().
                  log().body().
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
-          when().
+            when().
                  patch("/users/2").
-          then().
+            then().
                  log().status().
                  log().body().
                  statusCode(200).
-                 extract().as(UserUpdateResponseBody.class);
+                 extract().as(UserUpdateResponseBody.class));
 
-        assertEquals(name, responseBody.getName());
-        assertEquals(job, responseBody.getJob());
-        assertTrue(responseBody.getUpdatedAt().contains(currentYear));
+        step("Check response", () -> {
+            assertEquals(name, responseBody.getName());
+            assertEquals(job, responseBody.getJob());
+            assertTrue(responseBody.getUpdatedAt().contains(currentYear));
+        });
     }
 
     @Test
@@ -130,20 +138,22 @@ public class CreateAndUpdateUserTests {
         request.setJob(job);
 
         UserUpdateResponseBody responseBody =
-         given().
+        step("Make request and receive response", ()->
+            given().
                  log().uri().
                  log().body().
                  contentType(JSON).    // = header("content-type", JSON).
                  body(request).
-          when().
+            when().
                  put("/users/2").
-          then().
+            then().
                  log().status().
                  log().body().
                  statusCode(200).
-                 extract().as(UserUpdateResponseBody.class);
+                 extract().as(UserUpdateResponseBody.class));
 
-        assertNull(responseBody.getName());
+        step("Check response", () ->
+            assertNull(responseBody.getName()));
     }
 
 }
