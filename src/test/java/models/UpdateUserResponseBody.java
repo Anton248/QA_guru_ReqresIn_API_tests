@@ -3,7 +3,7 @@ package models;
 import lombok.Data;
 
 @Data
-public class UserUpdateResponseBody {
+public class UpdateUserResponseBody {
     String
         name,
         job,

@@ -3,7 +3,7 @@ package models;
 import lombok.Data;
 
 @Data
-public class RegistrationResponseBody {
+public class RegisterUserResponseBody {
 
     String id;
     String token;
