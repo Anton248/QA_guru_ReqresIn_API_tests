@@ -146,7 +146,7 @@ public class UsersTests {
 
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
-    @DisplayName("Updating user via patch")
+    @DisplayName("Update user via patch")
     void updateUserViaPatchTest() {
 
         UserRequestBody request = new UserRequestBody();
