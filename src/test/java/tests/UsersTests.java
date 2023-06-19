@@ -200,7 +200,7 @@ public class UsersTests {
     // Get user's list
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
-    @DisplayName("Get user's list")
+    @DisplayName("Get users' list")
     void GetUsersListTest() {
 
         GetUsersListResponseBody responseBody = step("Make request and receive response", ()->
