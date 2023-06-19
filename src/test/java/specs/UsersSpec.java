@@ -15,6 +15,7 @@ public class UsersSpec {
     public static final String REGISTER_PATH = "/register";
     public static final String CREATE_USER_PATH = "/users";
     public static final String UPDATE_USER_PATH = "/users/2";
+    public static final String GET_USERS_LIST_PATH = "/users?page=2";
 
     // Registration
 
@@ -54,9 +55,17 @@ public class UsersSpec {
             .expectBody(matchesJsonSchemaInClasspath("schemes/update-user-response-scheme.json"))
             .build();
 
-    public static ResponseSpecification updateEmptyUserResponseSpec = new ResponseSpecBuilder()
+    public static ResponseSpecification updateUserOnlyJobResponseSpec = new ResponseSpecBuilder()
             .addResponseSpecification(baseResponseSpec)
             .expectStatusCode(200)
+            .build();
+
+    // Get user's list
+
+    public static ResponseSpecification getUsersListResponseSpec = new ResponseSpecBuilder()
+            .addResponseSpecification(baseResponseSpec)
+            .expectStatusCode(200)
+            .expectBody(matchesJsonSchemaInClasspath("schemes/get-users-list-response-scheme.json"))
             .build();
 
 }

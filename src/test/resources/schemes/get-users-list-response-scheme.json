@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "page": {
+      "type": "integer"
+    },
+    "per_page": {
+      "type": "integer"
+    },
+    "total": {
+      "type": "integer"
+    },
+    "total_pages": {
+      "type": "integer"
+    },
+    "data": {
+      "type": "array"
+    },
+    "support": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "text"
+      ]
+    }
+  },
+  "required": [
+    "page",
+    "per_page",
+    "total",
+    "total_pages",
+    "data",
+    "support"
+  ]
+}

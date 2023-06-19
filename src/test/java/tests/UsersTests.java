@@ -8,6 +8,7 @@ import java.util.Calendar;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
+import static specs.BaseSpecs.baseRequestSpec;
 import static specs.UsersSpec.*;
 
 //Testing API https://reqres.in/
@@ -128,7 +129,7 @@ public class UsersTests {
         request.setJob(job);
 
         UpdateUserResponseBody responseBody = step("Make request and receive response", ()->
-             given(updateUserRequestSpec) //  = .spec(createUserRequestSpec)
+             given(updateUserRequestSpec)
                    .body(request)
              .when()
                    .put(UPDATE_USER_PATH)
@@ -156,7 +157,7 @@ public class UsersTests {
         request.setJob(job);
 
         UpdateUserResponseBody responseBody = step("Make request and receive response", ()->
-             given(updateUserRequestSpec) //  = .spec(createUserRequestSpec)
+             given(updateUserRequestSpec)
                    .body(request)
              .when()
                    .patch(UPDATE_USER_PATH)
@@ -172,29 +173,54 @@ public class UsersTests {
     }
 
     @Test
-    @Tag("smoke") @Tag("blocker") @Tag("positive")
-    @DisplayName("Update empty user")
-    void updateEmptyUserTest() {
+    @Tag("critical") @Tag("blocker") @Tag("positive")
+    @DisplayName("Update user's job only")
+    void updateUserOnlyJobTest() {
 
         UserRequestBody request = new UserRequestBody();
         String job = "zion resident";
         request.setJob(job);
 
         UpdateUserResponseBody responseBody = step("Make request and receive response", ()->
-             given(updateUserRequestSpec) //  = .spec(createUserRequestSpec)
+             given(updateUserRequestSpec)
                    .body(request)
              .when()
-                   .patch(UPDATE_USER_PATH)
+                   .put(UPDATE_USER_PATH)
              .then()
-                   .spec(updateEmptyUserResponseSpec)
+                   .spec(updateUserOnlyJobResponseSpec)
                    .extract().as(UpdateUserResponseBody.class));
 
-        step("Check response", () ->
-                assertNull(responseBody.getName()));
+        step("Check response", () -> {
+            assertNull(responseBody.getName());
+            assertEquals(job, responseBody.getJob());
+        });
 
     }
 
+    // Get user's list
+    @Test
+    @Tag("smoke") @Tag("blocker") @Tag("positive")
+    @DisplayName("Get user's list")
+    void GetUsersListTest() {
 
+        GetUsersListResponseBody responseBody = step("Make request and receive response", ()->
+               given(baseRequestSpec)
+               .when()
+                     .get(GET_USERS_LIST_PATH)
+               .then()
+                     .spec(getUsersListResponseSpec)
+                     .extract().as(GetUsersListResponseBody.class));
+
+        step("Check response", () -> {
+            assertEquals(2, responseBody.getPage());
+            assertEquals(6, responseBody.getPerPage());
+            assertEquals(12, responseBody.getTotal());
+            assertTrue(responseBody.getTotalPages() >= 2);
+            assertTrue(responseBody.getData().size() >= 1);
+            assertEquals("https://reqres.in/#support-heading", responseBody.getSupport().getUrl());
+            assertEquals("To keep ReqRes free, contributions towards server costs are appreciated!", responseBody.getSupport().getText());
+        });
+    }
 
 
 
