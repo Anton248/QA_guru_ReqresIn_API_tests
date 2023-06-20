@@ -19,7 +19,7 @@ public class UsersTests {
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
     @DisplayName("Register user via email & password")
-    void RegisterUserTest() {
+    void registerUserTest() {
 
         RegisterUserRequestBody request = new RegisterUserRequestBody();
         request.setEmail("eve.holt@reqres.in");
@@ -201,7 +201,7 @@ public class UsersTests {
     @Test
     @Tag("smoke") @Tag("blocker") @Tag("positive")
     @DisplayName("Get users' list")
-    void GetUsersListTest() {
+    void getUsersListTest() {
 
         GetUsersListResponseBody responseBody = step("Make request and receive response", ()->
                given(baseRequestSpec)
